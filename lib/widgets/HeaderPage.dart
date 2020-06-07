@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-AppBar header(context, {bool isAppTitle, String strTitle, disableBackButton = false}) {
+AppBar header(context, {bool isAppTitle = false, String strTitle, disableBackButton = false}) {
   return AppBar(
     iconTheme: IconThemeData(
       color: Colors.white
