@@ -1,3 +1,4 @@
+import 'package:buddiesgram/models/user.dart';
 import 'package:buddiesgram/pages/CreateAccountPage.dart';
 import 'package:buddiesgram/pages/NotificationsPage.dart';
 import 'package:buddiesgram/pages/ProfilePage.dart';
@@ -11,6 +12,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn gSignIn = GoogleSignIn();
 final usersReference = Firestore.instance.collection("users");
+
+final DateTime timestamp = DateTime.now();
+User currentUser;
 
 class HomePage extends StatefulWidget {
   @override
@@ -61,9 +65,22 @@ class _HomePageState extends State<HomePage> {
     final GoogleSignInAccount gCurrentUser = gSignIn.currentUser;
     DocumentSnapshot documentSnapshot = await usersReference.document(gCurrentUser.id).get();
 
-    if(!documentSnapshot.exists){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage()));
+    if(!documentSnapshot.exists) {
+      final username = Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage()));
+
+      usersReference.document(gCurrentUser.id).setData({
+        "id": gCurrentUser.id,
+        "profileName": gCurrentUser.displayName,
+        "username": username,
+        "url": gCurrentUser.photoUrl,
+        "email": gCurrentUser.email,
+        "bio": "Be creative",
+        "timestamp": timestamp
+      });
+
+      documentSnapshot = await usersReference.document(gCurrentUser.id).get();
     }
+    currentUser = User.fromDocument(documentSnapshot);
   }
 
   void dispose(){
