@@ -1,3 +1,4 @@
+import 'package:buddiesgram/widgets/HeaderPage.dart';
 import 'package:flutter/material.dart';
 
 class CreateAccountPage extends StatefulWidget {
@@ -8,6 +9,8 @@ class CreateAccountPage extends StatefulWidget {
 class _CreateAccountPageState extends State<CreateAccountPage> {
   @override
   Widget build(BuildContext parentContext) {
-    return Text("Here goes Create Account Page");
+    return Scaffold(
+      appBar: header(context, ),
+    );
   }
 }
