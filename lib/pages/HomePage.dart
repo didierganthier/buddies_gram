@@ -1,13 +1,16 @@
+import 'package:buddiesgram/pages/CreateAccountPage.dart';
 import 'package:buddiesgram/pages/NotificationsPage.dart';
 import 'package:buddiesgram/pages/ProfilePage.dart';
 import 'package:buddiesgram/pages/SearchPage.dart';
 import 'package:buddiesgram/pages/TimeLinePage.dart';
 import 'package:buddiesgram/pages/UploadPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 final GoogleSignIn gSignIn = GoogleSignIn();
+final usersReference = Firestore.instance.collection("users");
 
 class HomePage extends StatefulWidget {
   @override
@@ -38,9 +41,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  controlSignIn(GoogleSignInAccount signInAccount){
+  controlSignIn(GoogleSignInAccount signInAccount) async{
     if(signInAccount != null)
     {
+      await saveUserInfoToFirestore();
       setState(() {
         isSignedIn = true;
       });
@@ -50,6 +54,15 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         isSignedIn = false;
       });
+    }
+  }
+
+  saveUserInfoToFirestore() async {
+    final GoogleSignInAccount gCurrentUser = gSignIn.currentUser;
+    DocumentSnapshot documentSnapshot = await usersReference.document(gCurrentUser.id).get();
+
+    if(!documentSnapshot.exists){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage()));
     }
   }
 
@@ -67,7 +80,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   whenPageChanges(int index){
-    this.getPageIndex = index;
+    setState(() {
+      this.getPageIndex = index;
+    });
   }
 
   onTapChangePage(int index){
@@ -88,11 +103,11 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: whenPageChanges,
         physics: NeverScrollableScrollPhysics(),
       ),
-      bottomNavigationBar: CupertinoTabBar(
+      bottomNavigationBar: BottomNavigationBar(
         currentIndex: getPageIndex,
         onTap: onTapChangePage,
-        activeColor: Colors.white,
-        inactiveColor: Colors.blueGrey,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.blueGrey,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home)),
           BottomNavigationBarItem(icon: Icon(Icons.search)),
