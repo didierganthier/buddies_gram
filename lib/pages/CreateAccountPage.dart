@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:buddiesgram/pages/TimeLinePage.dart';
 import 'package:buddiesgram/widgets/HeaderPage.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       SnackBar snackBar = SnackBar(content: Text('Welcome $username'));
       _scaffoldKey.currentState.showSnackBar(snackBar);
       Timer(Duration(seconds: 4), (){
-        Navigator.pop(context, username);
+        if(Navigator.canPop(context)){
+          Navigator.pop(context);
+        }
+        else{
+          print("Cant pop");
+        }
       });
     }
   }
@@ -92,6 +98,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       child: Text(
                         "Proceed",
                         style: TextStyle(
+                          color: Colors.white,
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold
                         ),

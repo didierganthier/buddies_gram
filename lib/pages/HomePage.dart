@@ -6,6 +6,7 @@ import 'package:buddiesgram/pages/SearchPage.dart';
 import 'package:buddiesgram/pages/TimeLinePage.dart';
 import 'package:buddiesgram/pages/UploadPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -26,24 +27,6 @@ class _HomePageState extends State<HomePage> {
   bool isSignedIn = false;
   PageController pageController;
   int getPageIndex = 0;
-
-  void initState(){
-    super.initState();
-
-    pageController = PageController();
-
-    gSignIn.onCurrentUserChanged.listen((gSignInAccount) {
-      controlSignIn(gSignInAccount);
-    }, onError: (gError){
-      print('Error $gError');
-    });
-
-    gSignIn.signInSilently(suppressErrors: false).then((gSignInAccount){
-      controlSignIn(gSignInAccount);
-    }, onError: (gError){
-      print('Error $gError');
-    });
-  }
 
   controlSignIn(GoogleSignInAccount signInAccount) async{
     if(signInAccount != null)
@@ -66,12 +49,9 @@ class _HomePageState extends State<HomePage> {
     DocumentSnapshot documentSnapshot = await usersReference.document(gCurrentUser.id).get();
 
     if(!documentSnapshot.exists) {
-      final username = Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage()));
-
       usersReference.document(gCurrentUser.id).setData({
         "id": gCurrentUser.id,
         "profileName": gCurrentUser.displayName,
-        "username": username,
         "url": gCurrentUser.photoUrl,
         "email": gCurrentUser.email,
         "bio": "Be creative",
@@ -81,11 +61,6 @@ class _HomePageState extends State<HomePage> {
       documentSnapshot = await usersReference.document(gCurrentUser.id).get();
     }
     currentUser = User.fromDocument(documentSnapshot);
-  }
-
-  void dispose(){
-    pageController.dispose();
-    super.dispose();
   }
 
   loginUser(){
@@ -107,33 +82,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildHomeScreen(){
-    return Scaffold(
-      body: PageView(
-        children: <Widget>[
-          TimeLinePage(),
-          SearchPage(),
-          UploadPage(),
-          NotificationsPage(),
-          ProfilePage()
-        ],
-        controller: pageController,
-        onPageChanged: whenPageChanges,
-        physics: NeverScrollableScrollPhysics(),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: getPageIndex,
-        onTap: onTapChangePage,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.blueGrey,
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home)),
-          BottomNavigationBarItem(icon: Icon(Icons.search)),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle)),
-          BottomNavigationBarItem(icon: Icon(Icons.notifications)),
-          BottomNavigationBarItem(icon: Icon(Icons.person)),
-        ],
-      ),
-    );
+    return RaisedButton(onPressed: logoutUser, child: Icon(Icons.close));
   }
 
   Scaffold buildSignInScreen(){
@@ -172,6 +121,31 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+      pageController = PageController();
+
+      gSignIn.onCurrentUserChanged.listen((gSignInAccount) {
+        controlSignIn(gSignInAccount);
+      }, onError: (gError){
+        print('Error $gError');
+      });
+
+      gSignIn.signInSilently(suppressErrors: false).then((gSignInAccount){
+        controlSignIn(gSignInAccount);
+      }, onError: (gError){
+        print('Error $gError');
+      });
   }
 
   @override
