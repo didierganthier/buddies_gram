@@ -82,7 +82,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildHomeScreen(){
-    return RaisedButton(onPressed: logoutUser, child: Icon(Icons.close));
+    return Scaffold(
+      body: PageView(
+        children: <Widget>[
+          TimeLinePage(),
+          SearchPage(),
+          UploadPage(),
+          NotificationsPage(),
+          ProfilePage()
+        ],
+        controller: pageController,
+        onPageChanged: whenPageChanges,
+        physics: NeverScrollableScrollPhysics(),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: getPageIndex,
+        onTap: onTapChangePage,
+        selectedItemColor: Colors.lightBlueAccent,
+        unselectedItemColor: Colors.blueGrey,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), title: Text("Home")),
+          BottomNavigationBarItem(icon: Icon(Icons.search), title: Text("Search")),
+          BottomNavigationBarItem(icon: Icon(Icons.add_circle), title: Text("Add Post")),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), title: Text("Notifications")),
+          BottomNavigationBarItem(icon: Icon(Icons.person), title: Text("Profile")),
+        ],
+      ),
+    );
   }
 
   Scaffold buildSignInScreen(){
