@@ -22,6 +22,16 @@ class _UploadPageState extends State<UploadPage> {
     });
   }
 
+  pickImageFromGallery() async{
+    Navigator.pop(context);
+    File imageFile = await ImagePicker.pickImage(
+        source: ImageSource.gallery,
+    );
+    setState(() {
+      this.file = imageFile;
+    });
+  }
+
   takeImage(mContext){
     return showDialog(
       context: mContext,
@@ -32,7 +42,15 @@ class _UploadPageState extends State<UploadPage> {
             SimpleDialogOption(
               child: Text("Capture Image with Camera", style: TextStyle(color: Colors.white)),
               onPressed: captureImageWithCamera,
-            )
+            ),
+            SimpleDialogOption(
+              child: Text("Select Image from Gallery", style: TextStyle(color: Colors.white)),
+              onPressed: pickImageFromGallery,
+            ),
+            SimpleDialogOption(
+              child: Text("Cancel", style: TextStyle(color: Colors.white)),
+              onPressed: () => Navigator.pop(context),
+            ),
           ],
         );
       }
