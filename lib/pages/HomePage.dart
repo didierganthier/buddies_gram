@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           TimeLinePage(),
           SearchPage(),
-          UploadPage(),
+          UploadPage(gCurrentUser: currentUser),
           NotificationsPage(),
           ProfilePage()
         ],
