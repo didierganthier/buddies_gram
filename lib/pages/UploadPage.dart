@@ -40,15 +40,15 @@ class _UploadPageState extends State<UploadPage> {
           title: Text("New Post", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           children: <Widget>[
             SimpleDialogOption(
-              child: Text("Capture Image with Camera", style: TextStyle(color: Colors.white)),
+              child: Text("Capture Image with Camera", style: TextStyle(color: Colors.white, fontSize: 18.0)),
               onPressed: captureImageWithCamera,
             ),
             SimpleDialogOption(
-              child: Text("Select Image from Gallery", style: TextStyle(color: Colors.white)),
+              child: Text("Select Image from Gallery", style: TextStyle(color: Colors.white, fontSize: 18.0)),
               onPressed: pickImageFromGallery,
             ),
             SimpleDialogOption(
-              child: Text("Cancel", style: TextStyle(color: Colors.white)),
+              child: Text("Cancel", style: TextStyle(color: Colors.white, fontSize: 18.0)),
               onPressed: () => Navigator.pop(context),
             ),
           ],
@@ -69,7 +69,7 @@ class _UploadPageState extends State<UploadPage> {
             child: RaisedButton(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9.0)),
               child: Text("Upload Image", style: TextStyle(color: Colors.white, fontSize: 20.0)),
-              color: Colors.green,
+              color: Colors.blue,
               onPressed: () => takeImage(context),
             ),
           )
@@ -78,8 +78,30 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 
+  removeImage(){
+    setState(() {
+      file = null;
+    });
+  }
+
+  displayUploadFormScreen(){
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white), onPressed: removeImage),
+        title: Text("New Post", style: TextStyle(fontSize: 24.0, color: Colors.white, fontWeight: FontWeight.bold)),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: null,
+            child: Text("Share", style: TextStyle(color: Colors.lightGreenAccent, fontWeight: FontWeight.bold, fontSize: 16.0)),
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return displayUploadScreen();
+    return file == null? displayUploadScreen(): displayUploadFormScreen();
   }
 }
