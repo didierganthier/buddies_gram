@@ -1,9 +1,14 @@
 import 'dart:io';
 import 'package:buddiesgram/models/user.dart';
+import 'package:buddiesgram/pages/HomePage.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
+import 'package:image/image.dart' as ImD;
 
 class UploadPage extends StatefulWidget {
   final User gCurrentUser;
@@ -16,6 +21,8 @@ class UploadPage extends StatefulWidget {
 
 class _UploadPageState extends State<UploadPage> {
   File file;
+  bool uploading = false;
+  String postId = Uuid().v4();
   TextEditingController descriptionTextEditingController = TextEditingController();
   TextEditingController locationTextEditingController = TextEditingController();
 
@@ -102,6 +109,57 @@ class _UploadPageState extends State<UploadPage> {
     locationTextEditingController.text = specificAdress;
   }
 
+  compressingPhoto() async{
+    final tDirectory = await getTemporaryDirectory();
+    final path = tDirectory.path;
+    ImD.Image mImageFile = ImD.decodeImage(file.readAsBytesSync());
+    final compressedImageFile = File('$path/img_$postId.jpg')..writeAsBytesSync(ImD.encodeJpg(mImageFile, quality: 90));
+    setState(() {
+      file = compressedImageFile;
+    });
+  }
+
+  controlUploadAndSave() async {
+    setState(() {
+      uploading = true;
+    });
+
+    await compressingPhoto();
+
+    String downloadUrl = await uploadPhoto(file);
+
+    savePostInfoToFireStore(url: downloadUrl, location: locationTextEditingController.text, description: descriptionTextEditingController.text);
+
+    locationTextEditingController.clear();
+    descriptionTextEditingController.clear();
+
+    setState(() {
+      file = null;
+      uploading = false;
+      postId = Uuid().v4();
+    });
+  }
+
+  savePostInfoToFireStore({String url, String location, String description}){
+    postsReference.document(widget.gCurrentUser.id).collection("usersPosts").document(postId).setData({
+      "postId": postId,
+      "ownerId": widget.gCurrentUser.id,
+      "timestamp": timestamp,
+      "likes": {},
+      "username": widget.gCurrentUser.username,
+      "description": description,
+      "location": location,
+      "url": url
+    });
+  }
+
+  Future <String> uploadPhoto(mImageFile) async {
+    StorageUploadTask storageUploadTask = storageReference.child("post_$postId.jpg").putFile(mImageFile);
+    StorageTaskSnapshot storageTaskSnapshot = await storageUploadTask.onComplete;
+    String downloadUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
   displayUploadFormScreen(){
     return Scaffold(
       appBar: AppBar(
@@ -111,7 +169,7 @@ class _UploadPageState extends State<UploadPage> {
         title: Text("New Post", style: TextStyle(fontSize: 24.0, color: Colors.white, fontWeight: FontWeight.bold)),
         actions: <Widget>[
           FlatButton(
-            onPressed: ()=> print("tapped"),
+            onPressed: uploading ? null : controlUploadAndSave(),
             child: Text("Share", style: TextStyle(color: Colors.lightBlueAccent, fontWeight: FontWeight.bold, fontSize: 16.0)),
           )
         ],
