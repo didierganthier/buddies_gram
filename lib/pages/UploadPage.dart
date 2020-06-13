@@ -74,7 +74,7 @@ class _UploadPageState extends State<UploadPage> with AutomaticKeepAliveClientMi
     );
   }
 
-  displayUploadScreen(){
+  Widget displayUploadScreen(){
     return Container(
       color: Theme.of(context).accentColor.withOpacity(0.5),
       child: Column(
@@ -164,7 +164,7 @@ class _UploadPageState extends State<UploadPage> with AutomaticKeepAliveClientMi
     return downloadUrl;
   }
 
-  displayUploadFormScreen(){
+  Widget displayUploadFormScreen(){
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -173,7 +173,7 @@ class _UploadPageState extends State<UploadPage> with AutomaticKeepAliveClientMi
         title: Text("New Post", style: TextStyle(fontSize: 24.0, color: Colors.white, fontWeight: FontWeight.bold)),
         actions: <Widget>[
           FlatButton(
-            onPressed: uploading ? null : controlUploadAndSave(),
+            onPressed: uploading ? null : () => controlUploadAndSave(),
             child: Text("Share", style: TextStyle(color: Colors.lightBlueAccent, fontWeight: FontWeight.bold, fontSize: 16.0)),
           )
         ],
@@ -248,6 +248,6 @@ class _UploadPageState extends State<UploadPage> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
-    return file == null? displayUploadScreen(): displayUploadFormScreen();
+    return file == null ? displayUploadScreen(): displayUploadFormScreen();
   }
 }
