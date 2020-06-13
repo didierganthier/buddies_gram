@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:buddiesgram/models/user.dart';
 import 'package:buddiesgram/pages/HomePage.dart';
+import 'package:buddiesgram/widgets/ProgressWidget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class UploadPage extends StatefulWidget {
   _UploadPageState createState() => _UploadPageState();
 }
 
-class _UploadPageState extends State<UploadPage> {
+class _UploadPageState extends State<UploadPage> with AutomaticKeepAliveClientMixin<UploadPage>{
   File file;
   bool uploading = false;
   String postId = Uuid().v4();
@@ -94,7 +95,10 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 
-  removeImage(){
+  clearPostInfo(){
+    locationTextEditingController.clear();
+    descriptionTextEditingController.clear();
+
     setState(() {
       file = null;
     });
@@ -165,7 +169,7 @@ class _UploadPageState extends State<UploadPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         centerTitle: true,
-        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white), onPressed: removeImage),
+        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white), onPressed: clearPostInfo),
         title: Text("New Post", style: TextStyle(fontSize: 24.0, color: Colors.white, fontWeight: FontWeight.bold)),
         actions: <Widget>[
           FlatButton(
@@ -176,6 +180,7 @@ class _UploadPageState extends State<UploadPage> {
       ),
       body: ListView(
         children: <Widget>[
+          uploading ? linearProgress() : Text(""),
           Container(
             height: 230.0,
             width: MediaQuery.of(context).size.width * 0.8,
@@ -238,6 +243,8 @@ class _UploadPageState extends State<UploadPage> {
       ),
     );
   }
+
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
