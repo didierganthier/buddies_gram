@@ -110,6 +110,7 @@ final String currentOnlineUserId = currentUser?.id;
     return Container(
       padding: EdgeInsets.only(top: 3.0),
       child: FlatButton(
+        onPressed: performAction,
         child: Container(
           width: 200.0,
           height: 26.0,
