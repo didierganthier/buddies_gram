@@ -150,6 +150,7 @@ class _UploadPageState extends State<UploadPage> with AutomaticKeepAliveClientMi
       "ownerId": widget.gCurrentUser.id,
       "timestamp": timestamp,
       "likes": {},
+      "profileName": widget.gCurrentUser.profileName,
       "username": widget.gCurrentUser.username,
       "description": description,
       "location": location,
