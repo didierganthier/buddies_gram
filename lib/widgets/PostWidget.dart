@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:buddiesgram/models/user.dart';
 import 'package:buddiesgram/pages/HomePage.dart';
 import 'package:buddiesgram/widgets/CImageWidget.dart';
@@ -137,7 +135,7 @@ class _PostState extends State<Post> {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          cachedNetworkImage(url)
+          Image.network(url)
         ],
       ),
     );
