@@ -7,13 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Post extends StatefulWidget {
-  final String postId, ownerId, timestamp, profileName, username, description, location, url;
+  final String postId, ownerId, profileName, username, description, location, url;
   final dynamic likes;
 
   Post({
     this.postId,
     this.ownerId,
-    this.timestamp,
     this.username,
     this.description,
     this.location,
@@ -26,7 +25,6 @@ class Post extends StatefulWidget {
     return Post(
       postId: documentSnapshot["postId"],
       ownerId: documentSnapshot["ownerId"],
-      timestamp: documentSnapshot["timestamp"],
       likes: documentSnapshot["likes"],
       profileName: documentSnapshot["profileName"],
       username: documentSnapshot["username"],
@@ -54,7 +52,6 @@ class Post extends StatefulWidget {
   _PostState createState() => _PostState(
       postId: this.postId,
       ownerId: this.ownerId,
-      timestamp: this.timestamp,
       profileName: this.profileName,
       username: this.username,
       description: this.description,
@@ -66,7 +63,7 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
 
-  final String postId, ownerId, timestamp, profileName, username, description, location, url;
+  final String postId, ownerId, profileName, username, description, location, url;
   Map likes;
   int likeCount;
   bool isLiked, showHeart;
@@ -75,7 +72,6 @@ class _PostState extends State<Post> {
   _PostState({
     this.postId,
     this.ownerId,
-    this.timestamp,
     this.profileName,
     this.username,
     this.description,
@@ -151,7 +147,7 @@ class _PostState extends State<Post> {
             GestureDetector(
               onTap: ()=> print("like post"),
               child: Icon(
-                isLiked? Icons.favorite: Icons.favorite_border,
+                Icons.favorite_border,
                 size: 20.0,
                 color: Colors.red,
               ),
@@ -183,7 +179,7 @@ class _PostState extends State<Post> {
             Container(
               margin: EdgeInsets.only(left: 20.0),
               child: Text(
-                '$profileName',
+                '$profileName ',
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),

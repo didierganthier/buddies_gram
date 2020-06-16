@@ -23,7 +23,7 @@ class _ProfilePageState extends State<ProfilePage> {
   bool loading = false;
   int countPost = 0;
   List<Post> postsList = [];
-  String postOrientation = "list";
+  String postOrientation = "grid";
 
   void initState(){
    super.initState();
