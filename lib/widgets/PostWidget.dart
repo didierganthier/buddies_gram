@@ -223,6 +223,7 @@ class _PostState extends State<Post> {
               onTap: ()=> displayComments(context, postId: postId, ownerId: ownerId, url: url),
               child: Icon(
                 Icons.chat_bubble_outline,
+                color: Colors.white,
                 size: 20.0,
               ),
             ),
