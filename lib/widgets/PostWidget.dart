@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:buddiesgram/models/user.dart';
+import 'package:buddiesgram/pages/CommentsPage.dart';
 import 'package:buddiesgram/pages/HomePage.dart';
 import 'package:buddiesgram/widgets/CImageWidget.dart';
 import 'package:buddiesgram/widgets/ProgressWidget.dart';
@@ -219,7 +220,7 @@ class _PostState extends State<Post> {
             ),
             Padding(padding: EdgeInsets.only(right: 20.0)),
             GestureDetector(
-              onTap: ()=> print("show comments"),
+              onTap: ()=> displayComments(context, postId: postId, ownerId: ownerId, url: url),
               child: Icon(
                 Icons.chat_bubble_outline,
                 size: 20.0,
@@ -255,5 +256,9 @@ class _PostState extends State<Post> {
         ),
       ],
     );
+  }
+
+  displayComments(BuildContext context, {String postId, String ownerId, String url}) {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> CommentsPage(postId: postId, postOwnerId: ownerId, postImageUrl: url)));
   }
 }
