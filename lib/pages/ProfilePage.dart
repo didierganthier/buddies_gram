@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   getAllFollowing() async{
     QuerySnapshot querySnapshot = await followingReference
-        .document(currentOnlineUserId)
+        .document(widget.userProfileId)
         .collection("userFollowing")
         .getDocuments();
 
@@ -219,11 +219,11 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Container(
           width: 200.0,
           height: 26.0,
-          child: Text(title, style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+          child: Text(title, style: TextStyle(color: following? Colors.grey: Colors.white70, fontWeight: FontWeight.bold)),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.black,
-            border: Border.all(color: Colors.grey),
+            color: following? Colors.black: Colors.white70,
+            border: Border.all(color: following? Colors.grey: Colors.white70),
             borderRadius: BorderRadius.circular(6.0),
           ),
         ),
@@ -237,6 +237,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    getAllFollowers();
+    getAllFollowing();
     return Scaffold(
       appBar: header(context, strTitle: "Profile"),
       body: ListView(
