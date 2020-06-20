@@ -57,12 +57,13 @@ class CommentsPageState extends State<CommentsPage> {
     if(isNotPostOwner){
       activityFeedReference.document(postOwnerId).collection("feedItems").add({
         "type": "comment",
-        "commentDate": DateTime.now(),
+        "commentData": commentTextEditingController.text,
         "postId": postId,
         "userId": currentUser.id,
         "profileName": currentUser.profileName,
         "userProfileImg": currentUser.url,
-        "url": postImageUrl
+        "url": postImageUrl,
+        "timestamp": DateTime.now()
       });
     }
     commentTextEditingController.clear();
