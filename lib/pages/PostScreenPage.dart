@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class PostScreenPage extends StatelessWidget {
   final String userId, postId;
 
-  const PostScreenPage({this.userId, this.postId});
+  PostScreenPage({this.userId, this.postId});
 
   @override
   Widget build(BuildContext context) {

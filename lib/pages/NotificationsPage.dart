@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:buddiesgram/pages/HomePage.dart';
 import 'package:buddiesgram/pages/PostScreenPage.dart';
 import 'package:buddiesgram/pages/ProfilePage.dart';
@@ -84,11 +86,9 @@ class NotificationsItem extends StatelessWidget {
       timestamp: documentSnapshot["timestamp"],
     );
   }
-
   @override
   Widget build(BuildContext context) {
     configureMediaPreview(context);
-
     return Padding(
       padding: EdgeInsets.only(bottom: 2.0),
       child: Container(
@@ -151,9 +151,8 @@ class NotificationsItem extends StatelessWidget {
       notificationItemText = "Error, unknown type = $type";
     }
   }
-
-  displayFullPost(context){
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> PostScreenPage(userId: userId, postId: postId)));
+  displayFullPost(BuildContext context){
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> PostScreenPage(userId: currentUser.id, postId: postId)));
   }
 
   displayUserProfile(BuildContext context, {String profileId}) {
