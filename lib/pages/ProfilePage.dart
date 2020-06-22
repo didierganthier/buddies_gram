@@ -99,7 +99,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             createColumns("posts", countPost),
-                            createColumns("followers", countTotalFollowers),
+                            createColumns("followers", countTotalFollowers - 1),
                             createColumns("following", countTotalFollowing),
                           ],
                         ),
