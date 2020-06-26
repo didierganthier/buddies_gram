@@ -45,8 +45,6 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         isSignedIn = true;
       });
-
-      configureRealTimePushNotifications();
     }
     else
     {
@@ -54,41 +52,6 @@ class _HomePageState extends State<HomePage> {
         isSignedIn = false;
       });
     }
-  }
-
-  configureRealTimePushNotifications(){
-    final GoogleSignInAccount gUser = gSignIn.currentUser;
-
-    if(Platform.isIOS){
-      getIOSPermissions();
-    }
-
-    _firebaseMessaging.getToken().then((token){
-      usersReference.document(gUser.id).updateData({"androidNotificationToken": token});
-    });
-
-    _firebaseMessaging.configure(
-      onMessage: (Map< String, dynamic> msg) async{
-        final String recipientId = msg["data"]["recipient"];
-        final String body = msg["data"]["recipient"];
-
-        if(recipientId == gUser.id){
-          SnackBar snackBar = SnackBar(
-            backgroundColor: Colors.grey,
-            content: Text(body, style: TextStyle(color: Colors.black), overflow: TextOverflow.ellipsis),
-          );
-          _scaffoldKey.currentState.showSnackBar(snackBar);
-        }
-      },
-    );
-  }
-
-  getIOSPermissions(){
-    _firebaseMessaging.requestNotificationPermissions(IosNotificationSettings(alert: true, badge: true, sound: true));
-    
-    _firebaseMessaging.onIosSettingsRegistered.listen((settings) {
-      print("Settings Registered: $settings");
-    });
   }
 
   saveUserInfoToFirestore() async {
