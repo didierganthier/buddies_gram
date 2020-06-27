@@ -33,11 +33,21 @@ dependencies:
   path_provider: ^0.5.0+1
   firebase_messaging: ^4.0.0+1
   firebase_storage: ^2.1.0+1
+  flutter_launcher_icons: ^0.7.5
+  flutter_launcher_name: ^0.0.1
   flutter_svg:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  image_path: "assets/images/logo.png"
+  android: "logo"
+  ios: true
+
+flutter_launcher_name:
+  name: "KikArt"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

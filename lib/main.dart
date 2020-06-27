@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'BuddiesGram',
+      title: 'KikArt',
       debugShowCheckedModeBanner: false,
       theme: ThemeData
       (
